@@ -5,7 +5,7 @@ import "./App.css";
 
 const query = `
 {
-  cryptoCollection {
+  cryptoCollection(order: [rank_ASC]) {
     items {
       rank
       logo {
@@ -25,11 +25,11 @@ function App() {
 
   useEffect(() => {
     window
-      .fetch(`https://graphql.contentful.com/content/v1/spaces/aype0qiwbkns/`, {
+      .fetch(`https://graphql.contentful.com/content/v1/spaces/${process.env.REACT_APP_SPACE_ID}/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer JNnZYrM0GKTprGNVb5c8wbJx54IHKcoV1X95R_oQVa4",
+          Authorization: `Bearer ${process.env.REACT_APP_AUTH_TOKEN}`,
         },
         body: JSON.stringify({ query }),
       })
@@ -65,7 +65,7 @@ function App() {
           </TableHead>
           <TableBody>
           { list.map((entry) =>
-              <TableRow>
+              <TableRow key={entry.rank}>
                 <TableCell>{entry.rank}</TableCell>
                 <TableCell>
                   <img src={entry.logo.url} className="list-logo" alt="logo" />
